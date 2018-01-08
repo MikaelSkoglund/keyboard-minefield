@@ -1,6 +1,7 @@
+import Keyboard from '../components/Keyboard';
 const index = () => (
   <div>
-    <h1>Hello World</h1>
+    <Keyboard />
   </div>
 );
 
