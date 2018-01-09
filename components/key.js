@@ -1,15 +1,19 @@
 import { compose, pure, shouldUpdate } from 'recompose';
 
 const Key = props => (
-    <div>
+    <div className={props.keyObj.break ? "key-wrapper key-break" : "key-wrapper"}>
         {props.isActive ? (
             <span className="key active">{props.children.toUpperCase()}</span>
         ) : (
             <span className="key">{props.children.toUpperCase()}</span>
         )}
         <style jsx>{`
-            div {
-                display: inline-block;
+            .key-wrapper {
+                display: flex;
+                flex-direction: column;
+            }
+            .key-break{
+                margin-right: 10px;
             }
             .key {
                 display: inline-block;
@@ -27,6 +31,7 @@ const Key = props => (
                 background: yellowgreen;
             }
         `}</style>
+        {console.log(props)}
     </div>
 );
 

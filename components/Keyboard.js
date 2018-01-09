@@ -1,82 +1,36 @@
 import keys from './keyCodes';
 
 import Key from './Key';
-import Boom from './Boom';
+import KeyboardRow from './KeyboardRow';
 
-const randomKey = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-};
+const Keyboard = () => {
+    let pressedKey = null;
 
-class Keyboard extends React.Component {
-    constructor(props) {
-        super(props);
+    const onKeyDown = e => {
+        presskey();
+    };
 
-        this.state = {
-            lastKeyPressed: 0,
-            keysPressed: [],
-            armedKey: 0
-        };
-    }
-
-    componentDidMount() {
-        const armed = randomKey(65, 90);
-        console.log(armed);
-
-        this.setState({
-            armedKey: armed
-        });
-    }
-
-    render() {
-        const onKeyDown = e => {
-            this.setState({
-                lastKeyPressed: e.keyCode,
-                keysPressed: [...this.state.keysPressed, e.keyCode]
-            });
-
-            console.log(this.state.keysPressed);
-        };
-
-        if (this.state.keyPressed === this.state.armedKey) {
-            return <Boom />;
-        }
-
-        return (
-            <div className="keyboard" onKeyDown={onKeyDown} tabIndex="0">
-                <div className="keyboardRow">
-                    {keys.map(
-                        (obj, i) =>
-                            this.state.lastKeyPressed === obj.code ? (
-                                <Key key={obj.code} isActive={true}>
-                                    {obj.key}
-                                </Key>
-                            ) : (
-                                <Key key={obj.code} isActive={false}>
-                                    {obj.key}
-                                </Key>
-                            )
-                    )}
-                </div>
-                <style jsx>{`
-                    .keyboard {
-                        height: 100%;
-                        background: transparent;
-                    }
-                    .keyboardRow {
-                        position: absolute;
-                        top: 50%;
-                        transform: translateY(-50%);
-                    }
-                    .keyboard:focus {
-                        outline: none;
-                    }
-                    .keyboardRow {
-                        text-align: center;
-                    }
-                `}</style>
+    return (
+          <div className="wrapper">
+            <div className="keyboard">
+              {keys.map((row, i) => <KeyboardRow keyObj={keys[i]}/>)}
             </div>
-        );
-    }
-}
+            <style jsx>{`
+                .wrapper {
+                    height: 100vh;
+                    display: flex;
+                    align-items: center;
+                }
+                .keyboard {
+                    text-align: center;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                }
+            `}</style>
+          </div>
+    );
 
 export default Keyboard;
