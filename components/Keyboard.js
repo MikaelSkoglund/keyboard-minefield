@@ -1,34 +1,35 @@
 import keys from './keyCodes';
 import Key from './Key';
+import KeyboardRow from './KeyboardRow';
 
 const Keyboard = () => {
     let pressedKey = null;
 
     const onKeyDown = e => {
-        pressedKey = e.key.toString();
-        console.log(pressedKey);
+        presskey();
     };
 
     return (
-        <div className="keyboard" onKeyDown={onKeyDown} tabIndex="0">
-            <div className="keyboardRow">
-                {keys.map((obj, i) => {
-                    return pressedKey && pressedKey === obj.key ? (
-                        <Key isActive={true}>{obj.key}</Key>
-                    ) : (
-                        <Key isActive={false}>{obj.key}</Key>
-                    );
-                })}
+          <div className="wrapper">
+            <div className="keyboard">
+              {keys.map((row, i) => <KeyboardRow keyObj={keys[i]}/>)}
             </div>
             <style jsx>{`
-                .keyboard {
+                .wrapper {
                     height: 100vh;
+                    display: flex;
+                    align-items: center;
                 }
-                .keyboardRow {
+                .keyboard {
                     text-align: center;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
                 }
             `}</style>
-        </div>
+          </div>
     );
 };
 

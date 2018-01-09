@@ -1,16 +1,20 @@
 const Key = props => (
-    <div>
+    <div className={props.keyObj.break ? "key-wrapper key-break" : "key-wrapper"}>
         {props.isActive ? (
-            <span className="key active">{props.children}</span>
+            <span className="key active">{props.keyObj.key}</span>
         ) : (
-            <span className="key">{props.children}</span>
+            <span className="key">{props.keyObj.key}</span>
         )}
         <style jsx>{`
-            div {
-                display: inline-block;
+            .key-wrapper {
+                display: flex;
+                flex-direction: column;
+            }
+            .key-break{
+                margin-right: 10px;
             }
             .key {
-                display: inline-block;
+                display: flex;
                 border: 1px solid red;
                 padding: 10px;
                 margin-bottom: 5px;
@@ -19,6 +23,7 @@ const Key = props => (
                 background: yellowgreen;
             }
         `}</style>
+        {console.log(props)}
     </div>
 );
 
