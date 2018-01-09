@@ -10,7 +10,6 @@ const index = () => (
         `}</style>
         <style jsx>{`
             div {
-                background: black;
                 width: 100vw;
                 height: 100vh;
             }

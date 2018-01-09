@@ -1,18 +1,14 @@
 import { compose, pure, shouldUpdate } from 'recompose';
 
 const Key = props => (
-    <div className={props.keyObj.break ? "key-wrapper key-break" : "key-wrapper"}>
-        {props.isActive ? (
-            <span className="key active">{props.children.toUpperCase()}</span>
-        ) : (
-            <span className="key">{props.children.toUpperCase()}</span>
-        )}
+    <div>
+        <span className={props.keysPressed.includes(props.thisKeyCode) ? 'key active' : 'key'}>{props.children}</span>
         <style jsx>{`
             .key-wrapper {
                 display: flex;
                 flex-direction: column;
             }
-            .key-break{
+            .key-break {
                 margin-right: 10px;
             }
             .key {
@@ -31,8 +27,9 @@ const Key = props => (
                 background: yellowgreen;
             }
         `}</style>
-        {console.log(props)}
     </div>
 );
 
-export default pure(Key);
+const enhance = compose(pure);
+
+export default enhance(Key);
