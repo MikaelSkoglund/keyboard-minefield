@@ -1,9 +1,11 @@
+import { compose, pure, shouldUpdate } from 'recompose';
+
 const Key = props => (
     <div>
         {props.isActive ? (
-            <span className="key active">{props.children}</span>
+            <span className="key active">{props.children.toUpperCase()}</span>
         ) : (
-            <span className="key">{props.children}</span>
+            <span className="key">{props.children.toUpperCase()}</span>
         )}
         <style jsx>{`
             div {
@@ -11,9 +13,15 @@ const Key = props => (
             }
             .key {
                 display: inline-block;
-                border: 1px solid red;
-                padding: 10px;
-                margin-bottom: 5px;
+                border: 2px solid lightblue;
+                width: 50px;
+                height: 50px;
+                border-radius: 30%;
+                margin: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: lightblue;
             }
             .active {
                 background: yellowgreen;
@@ -22,4 +30,4 @@ const Key = props => (
     </div>
 );
 
-export default Key;
+export default pure(Key);
