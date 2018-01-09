@@ -1,12 +1,10 @@
-import keys from './keyCodes';
-
 const KeyboardRow = props => (
   <div className="keyboardRow">
-    {props.keyObj.map((obj, i) => (
-      <span className="key">
+    {props.keyObj.map((obj, i) =>
+        <span key={i} className={props.activeKeys.includes(obj.code) ? "key active" : "key"}>
         {obj.key}
-      </span>
-    ))}
+        </span>
+    )}
     <style jsx>{`
       .keyboardRow {
         text-align: center;
@@ -15,10 +13,20 @@ const KeyboardRow = props => (
         width: 100%;
       }
       .key{
-        padding: 15px 20px;
-        border: 1px solid #000;
+        padding: 20px 30px;
+        font-size: 24px;
+        background: #e7e7e7;
         margin: 5px;
         border-radius: 5px;
+        color: #212121;
+        box-shadow: rgba(0, 0, 0, 0.23) 3px 5px 5px 0px;
+        text-transform: uppercase;
+        transition: all 0.1s ease;
+      }
+      .active{
+        background: #FF7043;
+        color: #F5F5F5;
+        box-shadow: rgba(0, 0, 0, 0.23) 0px 3px 7px 0px;
       }
     `}</style>
   </div>
