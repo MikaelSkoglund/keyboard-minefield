@@ -20,7 +20,6 @@ class Keyboard extends React.Component {
 
     componentDidMount() {
         const armed = randomKey(65, 90);
-        console.log(armed);
 
         this.setState({
             armedKey: armed
@@ -33,8 +32,6 @@ class Keyboard extends React.Component {
                 lastKeyPressed: e.keyCode,
                 keysPressed: [...this.state.keysPressed, e.keyCode]
             });
-
-            console.log(this.state.keysPressed);
         };
 
         if (this.state.keyPressed === this.state.armedKey) {
