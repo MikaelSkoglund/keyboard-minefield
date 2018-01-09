@@ -1,4 +1,5 @@
 import keys from './keyCodes';
+
 import Key from './Key';
 import KeyboardRow from './KeyboardRow';
 
@@ -31,6 +32,5 @@ const Keyboard = () => {
             `}</style>
           </div>
     );
-};
 
 export default Keyboard;

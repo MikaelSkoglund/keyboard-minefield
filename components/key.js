@@ -1,9 +1,11 @@
+import { compose, pure, shouldUpdate } from 'recompose';
+
 const Key = props => (
     <div className={props.keyObj.break ? "key-wrapper key-break" : "key-wrapper"}>
         {props.isActive ? (
-            <span className="key active">{props.keyObj.key}</span>
+            <span className="key active">{props.children.toUpperCase()}</span>
         ) : (
-            <span className="key">{props.keyObj.key}</span>
+            <span className="key">{props.children.toUpperCase()}</span>
         )}
         <style jsx>{`
             .key-wrapper {
@@ -14,10 +16,16 @@ const Key = props => (
                 margin-right: 10px;
             }
             .key {
+                display: inline-block;
+                border: 2px solid lightblue;
+                width: 50px;
+                height: 50px;
+                border-radius: 30%;
+                margin: 5px;
                 display: flex;
-                border: 1px solid red;
-                padding: 10px;
-                margin-bottom: 5px;
+                align-items: center;
+                justify-content: center;
+                color: lightblue;
             }
             .active {
                 background: yellowgreen;
@@ -27,4 +35,4 @@ const Key = props => (
     </div>
 );
 
-export default Key;
+export default pure(Key);
