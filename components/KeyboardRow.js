@@ -1,7 +1,7 @@
 import { codes } from './keyCodes';
 
 const KeyboardRow = props => {
-    const intensity = (codes.length - props.activeKeys.length) / 100; //ALGORITM MÅSTE FIXASS ASAAPPPPP
+    const intensity = 1 / props.activeKeys.length;
     return (
         <div className="keyboardRow">
             {props.keyObj.map((obj, i) => (
@@ -30,15 +30,15 @@ const KeyboardRow = props => {
                 .active {
                     color: #f5f5f5;
                     box-shadow: rgba(0, 0, 0, 0.23) 0px 3px 7px 0px;
-                    animation: wiggle ${intensity}s infinite alternate;
+                    animation: wiggle ${intensity}s linear infinite alternate;
                 }
                 @keyframes wiggle {
                     from {
-                        transform: rotate(2deg);
+                        transform: rotate(3deg);
                         background: #ff7043;
                     }
                     to {
-                        transform: rotate(-2deg);
+                        transform: rotate(-3deg);
                         background: #ff5722;
                     }
                 }
