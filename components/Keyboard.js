@@ -3,6 +3,7 @@ import KeyboardRow from './KeyboardRow';
 import Boom from './Boom';
 import Error from './Error';
 import Defuse from './Defuse';
+import GlobalEventHandler from './GlobalEventHandler';
 
 import {
     compose,
@@ -11,16 +12,22 @@ import {
     lifecycle,
     branch,
     renderComponent,
-    renderNothing
+    renderNothing,
+    withProps
 } from 'recompose';
 
-const Keyboard = ({ keysPressed, armedKey, lastKeyPressed, onKeyDown }) => {
+//const Keyboard = ({ keysPressed, armedKey, lastKeyPressed, onKeyDown }) => {
+const Keyboard = props => {
+    if (props.armedKey === props.pressedKey) {
+        props.setDefuseMode(true);
+    }
+    console.log(props);
+    const { keysPressed, armedKey, lastKeyPressed, onKeyDown } = props;
     const sweats = [
         'https://media.giphy.com/media/LRVnPYqM8DLag/giphy.gif',
         'https://media.giphy.com/media/4bWWKmUnn5E4/giphy.gif',
         'https://media.giphy.com/media/hBn5xBlaUxyLu/giphy.gif'
     ];
-
     const incNum = keysPressed.length;
     const alarmTrigger = incNum < 16 ? 0 : 10 / incNum;
 
@@ -29,7 +36,7 @@ const Keyboard = ({ keysPressed, armedKey, lastKeyPressed, onKeyDown }) => {
     const img3 = incNum < 25 ? 'hidden' : 'visible';
 
     return (
-        <div className="wrapper" onKeyDown={onKeyDown} tabIndex="0">
+        <div className="wrapper" tabIndex="0">
             {incNum > 30 ? <Error /> : null}
             <div className="keyboard">
                 {keys.map((row, i) => (
@@ -85,24 +92,20 @@ const Keyboard = ({ keysPressed, armedKey, lastKeyPressed, onKeyDown }) => {
 };
 
 const boomOnBoom = triggered => branch(triggered, renderComponent(Defuse));
-//const boomOnBoom = props => props.engageDefuseMode;
 
 const enhance = compose(
-    withState('lastKeyPressed', 'setLastKey', 0),
-    withState('keysPressed', 'setPressedKeys', []),
+    withState('armedKey', 'setArmedKey', null),
+    withProps(props => ({
+        pressedKey: props.pressedKey,
+        keysPressed: props.keysPressed
+    })),
     withState('defuseModeEngaged', 'setDefuseMode', false),
-    withState('armedKey', 'setArmedKey', 0),
     withHandlers({
-        onKeyDown: props => event => {
-            props.setPressedKeys([...props.keysPressed, event.keyCode]);
-            props.setLastKey(event.keyCode);
-
-            if (props.armedKey === event.keyCode) {
-                props.setDefuseMode(true);
-            }
+        setDefuseMode: props => () => {
+            props.setDefuseMode(true);
         },
         setArmed: props => () => {
-            // const randomNum = Math.floor(Math.random() * codes.length);
+            //const randomNum = Math.floor(Math.random() * codes.length);
             const randomNum = 0;
             props.setArmedKey(codes[randomNum]);
         }
