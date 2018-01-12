@@ -5,7 +5,10 @@ const KeyboardRow = props => {
     return (
         <div className="keyboardRow">
             {props.keyObj.map((obj, i) => (
-                <span key={i} className={props.activeKeys.includes(obj.code) ? 'key active' : 'key'}>
+                <span
+                    key={i}
+                    className={props.activeKeys.includes(obj.code) ? 'key active' : 'key'}
+                >
                     {obj.key}
                 </span>
             ))}

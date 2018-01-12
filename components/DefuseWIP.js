@@ -17,9 +17,10 @@ import {
 
 const Defuse = props => {
     // const { safeWord, decrypted, scrambled } = props;
-    // if (safeWord.length === 0 && decrypted.length > 0) {
-    //     return <Keyboard />;
-    // }
+    if (props.safeWord.length === 0 && props.decrypted.length > 0) {
+        return <Keyboard />;
+    }
+
     return (
         <div className="wrapper" onClick={props.feedDecrypt}>
             {console.log(props)}
@@ -81,41 +82,21 @@ const enhance = compose(
     withState('scrambled', 'setScrambled', []),
     withState('decrypted', 'setDecrypted', []),
     withState('index', 'setIndex', 0),
-    // withProps(props => {
-    //     decrypted: props.pressedKey === props.safeWord[props.index] ? props.feedDecrypt() : null;
-    // }),
     withHandlers({
-        feedDecrypt: props => e => {
-            console.log(props.pressed.charCodeAt(0));
+        feedDecrypt: props => () => {
+            const letter = String.fromCharCode(props.pressedKey).toLowerCase();
             const safeWord = props.safeWord;
             const index = props.index;
-            if (props.pressedKey === safeWord[index]) {
+
+            if (letter === safeWord[index]) {
                 const arr = props.safeWord;
                 const scrambleDel = [...props.scrambled];
+
                 arr.splice(index, 1);
-                scrambleDel.splice(scrambleDel.indexOf(e.key), 1);
-                props.setDecrypted([...this.props.decrypted, e.key]), props.setSafeword(arr);
-                props.scrambled(scrambledDel);
-                // this.setState({
-                //     decrypted: [...this.state.decrypted, e.key],
-                //     safeWord: arr,
-                //     scrambled: scrambleDel
-                // });
-            }
-        },
-        pressKeys: props => e => {
-            const safeWord = this.state.safeWord;
-            const index = this.state.index;
-            if (e.key === safeWord[index]) {
-                const arr = this.state.safeWord;
-                const scrambleDel = [...this.state.scrambled];
-                arr.splice(index, 1);
-                scrambleDel.splice(scrambleDel.indexOf(e.key), 1);
-                this.setState({
-                    decrypted: [...this.state.decrypted, e.key],
-                    safeWord: arr,
-                    scrambled: scrambleDel
-                });
+                scrambleDel.splice(scrambleDel.indexOf(letter), 1);
+
+                props.setDecrypted([...props.decrypted, letter]), props.setSafeWord(arr);
+                props.setScrambled(scrambleDel);
             }
         },
         shuffle: props => word => {
@@ -163,9 +144,13 @@ const enhance = compose(
                 .then(scramble => {
                     this.props.shuffle(scramble);
                 });
+        },
+        componentWillReceiveProps(nextProps) {
+            if (this.props.pressedKey !== nextProps.pressedKey) {
+                this.props.feedDecrypt();
+            }
         }
-    }),
-    shouldUpdate(props => props.pressedKey === props.pressedKey)
+    })
 );
 
 export default enhance(Defuse);

@@ -3,6 +3,7 @@ import KeyboardRow from './KeyboardRow';
 import Boom from './Boom';
 import Error from './Error';
 import Defuse from './Defuse';
+import Defuser from './DefuseWIP';
 import GlobalEventHandler from './GlobalEventHandler';
 
 import {
@@ -28,28 +29,29 @@ const Keyboard = props => {
         'https://media.giphy.com/media/4bWWKmUnn5E4/giphy.gif',
         'https://media.giphy.com/media/hBn5xBlaUxyLu/giphy.gif'
     ];
-    const incNum = keysPressed.length;
-    const alarmTrigger = incNum < 16 ? 0 : 10 / incNum;
 
-    const img1 = incNum < 19 ? 'hidden' : 'visible';
-    const img2 = incNum < 22 ? 'hidden' : 'visible';
-    const img3 = incNum < 25 ? 'hidden' : 'visible';
+    // const incNum = keysPressed.length;
+    // const alarmTrigger = incNum < 16 ? 0 : 10 / incNum;
+
+    // const img1 = incNum < 19 ? 'hidden' : 'visible';
+    // const img2 = incNum < 22 ? 'hidden' : 'visible';
+    // const img3 = incNum < 25 ? 'hidden' : 'visible';
 
     return (
         <div className="wrapper" tabIndex="0">
-            {incNum > 30 ? <Error /> : null}
+            {/* {incNum > 30 ? <Error /> : null} */}
             <div className="keyboard">
                 {keys.map((row, i) => (
                     <KeyboardRow activeKeys={keysPressed} key={i} keyObj={keys[i]} />
                 ))}
             </div>
-            {sweats.map((img, i) => <img key={i} className={`sweat sweat${i}`} src={img} />)}
+            {/* {sweats.map((img, i) => <img key={i} className={`sweat sweat${i}`} src={img} />)} */}
             <style jsx>{`
                 .wrapper {
                     height: 100vh;
                     display: flex;
                     align-items: center;
-                    animation: alarm ${alarmTrigger}s linear infinite alternate;
+                    // animation: alarm ${alarmTrigger}s linear infinite alternate;
                 }
                 .keyboard {
                     text-align: center;
@@ -63,20 +65,20 @@ const Keyboard = props => {
                     position: absolute;
                     width: 500px;
                 }
-                .sweat0 {
-                    top: 0;
-                    left: 0;
-                    visibility: ${img1};
-                }
-                .sweat1 {
-                    top: 0;
-                    right: 0;
-                    visibility: ${img2};
-                }
-                .sweat2 {
-                    bottom: 0;
-                    left: 0;
-                    visibility: ${img3};
+                // .sweat0 {
+                //     top: 0;
+                //     left: 0;
+                //     visibility: ${img1};
+                // }
+                // .sweat1 {
+                //     top: 0;
+                //     right: 0;
+                //     visibility: ${img2};
+                // }
+                // .sweat2 {
+                //     bottom: 0;
+                //     left: 0;
+                //     visibility: ${img3};
                 }
                 @keyframes alarm {
                     from {
@@ -91,13 +93,13 @@ const Keyboard = props => {
     );
 };
 
-const boomOnBoom = triggered => branch(triggered, renderComponent(Defuse));
+const boomOnBoom = triggered => branch(triggered, renderComponent(Defuser));
 
 const enhance = compose(
     withState('armedKey', 'setArmedKey', null),
     withProps(props => ({
         pressedKey: props.pressedKey,
-        keysPressed: props.keysPressed
+        keysPressed: props.keysPressed ? props.keysPressed : []
     })),
     withState('defuseModeEngaged', 'setDefuseMode', false),
     withHandlers({

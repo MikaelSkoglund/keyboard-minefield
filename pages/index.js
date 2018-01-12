@@ -1,5 +1,6 @@
 import Keyboard from '../components/Keyboard';
 import GlobalEventHandler from '../components/GlobalEventHandler';
+
 const index = () => (
     <div>
         <GlobalEventHandler>
