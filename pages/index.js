@@ -1,7 +1,7 @@
-import Keyboard from '../components/Keyboard';
+import App from '../components/App';
 const index = () => (
     <div>
-        <Keyboard />
+        <App />
         <style jsx global>{`
             body {
                 margin: 0px;
