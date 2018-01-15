@@ -18,7 +18,7 @@ import {
 const Defuse = props => {
     // const { safeWord, decrypted, scrambled } = props;
     if (props.safeWord.length === 0 && props.decrypted.length > 0) {
-        return <Keyboard />;
+        props.setDone(true);
     }
 
     return (
@@ -77,6 +77,8 @@ const Defuse = props => {
     );
 };
 
+const KeyboardWhenDone = done => branch(done, renderComponent(Keyboard));
+
 const enhance = compose(
     withState('safeWord', 'setSafeWord', []),
     withState('scrambled', 'setScrambled', []),
@@ -110,22 +112,6 @@ const enhance = compose(
                 a[j] = tmp;
             }
             props.setScrambled(a);
-        },
-        fetchData: () => () => {
-            axios
-                .get(
-                    'http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=noun&minCorpusCount=8000&maxCorpusCount=-1&minDictionaryCount=3&maxDictionaryCount=-1&minLength=6&maxLength=12&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5'
-                )
-                .then(res => {
-                    return res.data.word.toLowerCase().split('');
-                })
-                .then(safeWord => {
-                    this.props.setSafeWord(safeWord);
-                    return safeWord;
-                })
-                .then(scramble => {
-                    this.props.shuffle(scramble);
-                });
         }
     }),
     lifecycle({
@@ -151,6 +137,9 @@ const enhance = compose(
             }
         }
     })
+    // KeyboardWhenDone(
+    //     props => (props.scrambled.length === 0 && props.decrypted.length > 0 ? true : false)
+    // )
 );
 
 export default enhance(Defuse);

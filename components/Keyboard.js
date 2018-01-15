@@ -2,7 +2,7 @@ import { keys, codes } from './keyCodes';
 import KeyboardRow from './KeyboardRow';
 import Boom from './Boom';
 import Error from './Error';
-import Defuse from './Defuse';
+// import Defuse from './Defuse';
 import Defuser from './DefuseWIP';
 import GlobalEventHandler from './GlobalEventHandler';
 
@@ -103,8 +103,8 @@ const enhance = compose(
     })),
     withState('defuseModeEngaged', 'setDefuseMode', false),
     withHandlers({
-        setDefuseMode: props => () => {
-            props.setDefuseMode(true);
+        setDefuseMode: props => arg => {
+            props.setDefuseMode(arg);
         },
         setArmed: props => () => {
             //const randomNum = Math.floor(Math.random() * codes.length);
@@ -115,6 +115,9 @@ const enhance = compose(
     lifecycle({
         componentDidMount() {
             this.props.setArmed();
+        },
+        componentWillUnmount() {
+            this.props.defuseModeEngaged(false);
         }
     }),
     boomOnBoom(props => props.defuseModeEngaged)
