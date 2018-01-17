@@ -1,12 +1,51 @@
 import KeyboardRow from './KeyboardRow';
 import Boom from './Boom';
+import Error from './Error';
+// import Defuse from './Defuse';
+import Defuser from './DefuseWIP';
+import GlobalEventHandler from './GlobalEventHandler';
 import { PlayerAvatar } from './Player';
 import { keys, codes } from './keyCodes';
 import { PlayersObj } from './PlayersObj';
 
-import { compose, withState, withHandlers, lifecycle } from 'recompose';
+import {
+    compose,
+    withState,
+    withHandlers,
+    lifecycle,
+    branch,
+    renderComponent,
+    renderNothing,
+    withProps
+} from 'recompose';
 
-const Keyboard = props =>
+//const Keyboard = ({ keysPressed, armedKey, lastKeyPressed, onKeyDown }) => {
+const Keyboard = props => {
+   // if (props.armedKey === props.pressedKey) {
+ //       props.setDefuseMode(true);
+   // }
+   // console.log(props);
+  //  const { keysPressed, armedKey, lastKeyPressed, onKeyDown } = props;
+   // const sweats = [
+   //     'https://media.giphy.com/media/LRVnPYqM8DLag/giphy.gif',
+   //     'https://media.giphy.com/media/4bWWKmUnn5E4/giphy.gif',
+    //    'https://media.giphy.com/media/hBn5xBlaUxyLu/giphy.gif'
+   // ];
+
+    // const incNum = keysPressed.length;
+    // const alarmTrigger = incNum < 16 ? 0 : 10 / incNum;
+
+    // const img1 = incNum < 19 ? 'hidden' : 'visible';
+    // const img2 = incNum < 22 ? 'hidden' : 'visible';
+    // const img3 = incNum < 25 ? 'hidden' : 'visible';
+
+    //return (
+      //  <div className="wrapper" tabIndex="0">
+        //    {/* {incNum > 30 ? <Error /> : null} */}
+          //  <div className="keyboard">
+            //    {keys.map((row, i) => (
+              //      <KeyboardRow activeKeys={keysPressed} key={i} keyObj={keys[i]} />
+               // ))}
     props.armedKey === props.lastKeyPressed ? (
         <Boom />
     ) : (
@@ -26,12 +65,14 @@ const Keyboard = props =>
                                                    keysPressed={props.keysPressed} />)
                 }
             </div>
+            {/* {sweats.map((img, i) => <img key={i} className={`sweat sweat${i}`} src={img} />)} */}
             <style jsx>{`
                 .wrapper {
                     height: 100vh;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
+                    // animation: alarm ${alarmTrigger}s linear infinite alternate;
                     justify-content: center;
                 }
                 .players-wrapper{
@@ -47,17 +88,53 @@ const Keyboard = props =>
                     align-items: center;
                     width: 100%;
                 }
+                .sweat {
+                    position: absolute;
+                    width: 500px;
+                }
+                // .sweat0 {
+                //     top: 0;
+                //     left: 0;
+                //     visibility: ${img1};
+                // }
+                // .sweat1 {
+                //     top: 0;
+                //     right: 0;
+                //     visibility: ${img2};
+                // }
+                // .sweat2 {
+                //     bottom: 0;
+                //     left: 0;
+                //     visibility: ${img3};
+                }
+                @keyframes alarm {
+                    from {
+                        background: transparent;
+                    }
+                    to {
+                        background: #ff9999;
+                    }
+                }
             `}</style>
         </div>
     );
+};
+
+const boomOnBoom = triggered => branch(triggered, renderComponent(Defuser));
 
 const enhance = compose(
-    withState('lastKeyPressed', 'setLastKey', 0),
-    withState('keysPressed', 'setPressedKeys', []),
-    withState('armedKey', 'setArmedKey', 0),
+    withState('armedKey', 'setArmedKey', null),
+    withProps(props => ({
+        lastKeyPressed: props.pressedKey,
+        keysPressed: props.keysPressed ? props.keysPressed : []
+    })),
+    withState('defuseModeEngaged', 'setDefuseMode', false),
     withState('invalidKey', 'setInvalidKey', false),
     withState('currentPlayer', 'setCurrentPlayer', 0),
     withHandlers({
+        setDefuseMode: props => arg => {
+            props.setDefuseMode(arg);
+        },
         onKeyDown: props => event => {
 
             props.setInvalidKey(false);
@@ -83,20 +160,22 @@ const enhance = compose(
                     props.setPressedKeys([...props.keysPressed, event.keyCode]);
                 }
             }
-
-            //Setting current player
-            props.setLastKey(event.keyCode);
         },
         setArmed: props => () => {
-            const randomNum = Math.floor(Math.random() * codes.length);
+            //const randomNum = Math.floor(Math.random() * codes.length);
+            const randomNum = 0;
             props.setArmedKey(codes[randomNum]);
         }
     }),
     lifecycle({
         componentDidMount() {
             this.props.setArmed();
+        },
+        componentWillUnmount() {
+            this.props.defuseModeEngaged(false);
         }
-    })
+    }),
+    boomOnBoom(props => props.defuseModeEngaged)
 );
 
 export default enhance(Keyboard);
