@@ -6,17 +6,19 @@ const SelectPlayers = ({ players, incrementPlayers, decrementPlayers, toggleRead
   <div className={readyGame ? "wrapper dissapear" : "wrapper"}>
     <div className="inner-wrapper">
       <div className="player-wrapper">
+        <div className="player-inner-wrapper">
         {players.map((player, i) => (
           <Player key={players[i].player}
                   name={players[i].player}
                   color={players[i].color} />
         ))}
+        </div>
       </div>
       <div className="options-wrapper">
         <div className="btn-row">
           <button className={players.length > 1 ? "btn row-btn row-btn" : "btn btn-inactive row-btn row-btn"}
                   onClick={decrementPlayers}>-</button>
-          <button className={players.length < 5 ? "btn row-btn row-btn" : "btn btn-inactive row-btn row-btn"}
+          <button className={players.length < 6 ? "btn row-btn row-btn" : "btn btn-inactive row-btn row-btn"}
                   onClick={incrementPlayers}>+</button>
         </div>
         <button className="btn" onClick={toggleReady}>Start game</button>
@@ -37,13 +39,14 @@ const SelectPlayers = ({ players, incrementPlayers, decrementPlayers, toggleRead
         transition: all 0.2s ease;
       }
       .inner-wrapper{
-        width: 500px;
-        height: 50vh;
+        width: 450px;
+        height: 600px;
         display: flex;
         transform: translate(-50%, -50%);
         top: 50%;
         left: 50%;
         position: absolute;
+        display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
@@ -54,13 +57,20 @@ const SelectPlayers = ({ players, incrementPlayers, decrementPlayers, toggleRead
       .player-wrapper{
         display: flex;
         width: 100%;
+        height: 50%;
+        aling-items: flex-start;
+      }
+      .player-inner-wrapper{
+        display: flex;
         flex-wrap: wrap;
         justify-content: center;
+        margin: auto;
       }
       .options-wrapper{
         display: flex;
         flex-direction: column;
         align-items: center;
+        background: red;
       }
       .btn{
         outline: none;

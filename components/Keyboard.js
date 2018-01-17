@@ -1,24 +1,30 @@
-import { keys, codes } from './keyCodes';
 import KeyboardRow from './KeyboardRow';
 import Boom from './Boom';
-import { PlayerLrg } from './Player';
-
+import { PlayerAvatar } from './Player';
+import { keys, codes } from './keyCodes';
 import { PlayersObj } from './PlayersObj';
 
 import { compose, withState, withHandlers, lifecycle } from 'recompose';
 
-let currentPlayer = 0;
-
 const Keyboard = props =>
-    props.armedKey === props.lastKeyPressed[0] ? (
+    props.armedKey === props.lastKeyPressed ? (
         <Boom />
     ) : (
-        <div className="wrapper" onKeyDown={props.onKeyDown} tabIndex="0">
+        <div className="wrapper" onKeyDown={props.onKeyDown} onKeyUp={props.onKeyUp} tabIndex="0">
             <div className="players-wrapper">
-              {props.players.map((item, i) => <PlayerLrg key={item.player} name={item.player} color={item.color} />)}
+                {props.players.map((player, i) => <PlayerAvatar key={player.player}
+                                                                currentPlayer={props.currentPlayer}
+                                                                nr={player.nr}
+                                                                name={player.player}
+                                                                color={player.color}
+                                                                invalid={props.invalidKey} />)
+                }
             </div>
             <div className="keyboard">
-                {keys.map((row, i) => <KeyboardRow keysPressed={props.keysPressed} keysPressed={props.keysPressed} key={i} keyObj={keys[i]} />)}
+                {keys.map((row, i) => <KeyboardRow key={i}
+                                                   keyObj={keys[i]}
+                                                   keysPressed={props.keysPressed} />)
+                }
             </div>
             <style jsx>{`
                 .wrapper {
@@ -48,23 +54,38 @@ const Keyboard = props =>
 const enhance = compose(
     withState('lastKeyPressed', 'setLastKey', 0),
     withState('keysPressed', 'setPressedKeys', []),
-    withState('playersPressed', 'setPlayersPressed', 0),
     withState('armedKey', 'setArmedKey', 0),
+    withState('invalidKey', 'setInvalidKey', false),
     withState('currentPlayer', 'setCurrentPlayer', 0),
     withHandlers({
         onKeyDown: props => event => {
-            //Setting the last pressed key
-            props.setLastKey(event.keyCode);
 
-            //Setting all keys that has been pressed
-            props.setPressedKeys([...props.keysPressed, event.keyCode]);
+            props.setInvalidKey(false);
+
+        },
+        onKeyUp: props => event => {
+            const validKey = codes.includes(event.keyCode);
+            const alreadyPressed = props.keysPressed.includes(event.keyCode);
+
+            //Check if key is not valid or already pressed.
+            //If conditions are met set duplicate to true.
+            if (!validKey || alreadyPressed){
+                props.setInvalidKey(true);
+            } else {
+            //Else set duplicate to false,
+            //push valid keys to keys array and increment/reset player-turn depending on conditions.
+                props.setInvalidKey(false);
+                if (props.currentPlayer > props.players.length - 2) {
+                    props.setCurrentPlayer(0);
+                    props.setPressedKeys([...props.keysPressed, event.keyCode]);
+                } else {
+                    props.setCurrentPlayer(props.currentPlayer + 1);
+                    props.setPressedKeys([...props.keysPressed, event.keyCode]);
+                }
+            }
 
             //Setting current player
-            currentPlayer++;
-            if (currentPlayer > props.players.length) {
-                currentPlayer = 1;
-            }
-            props.setPlayersPressed(currentPlayer);
+            props.setLastKey(event.keyCode);
         },
         setArmed: props => () => {
             const randomNum = Math.floor(Math.random() * codes.length);
