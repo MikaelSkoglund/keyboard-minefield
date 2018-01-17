@@ -25,7 +25,7 @@ const enhance = compose(
   withState('readyGame', 'setReady', false),
   withHandlers({
     incrementPlayers: props => () => {
-        if(props.players.length < 5) {
+        if(props.players.length < 6) {
           num++
           props.setPlayers([...props.players, PlayersObj[num]]);
         }
