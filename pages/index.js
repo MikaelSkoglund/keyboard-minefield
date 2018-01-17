@@ -1,10 +1,11 @@
 import Keyboard from '../components/Keyboard';
 import GlobalEventHandler from '../components/GlobalEventHandler';
+import App from '../components/App';
 
 const index = () => (
     <div>
         <GlobalEventHandler>
-            <Keyboard />
+    <App />
         </GlobalEventHandler>
         <style jsx global>{`
             body {
