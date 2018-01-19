@@ -21,16 +21,16 @@ import {
 
 //const Keyboard = ({ keysPressed, armedKey, lastKeyPressed, onKeyDown }) => {
 const Keyboard = props => {
-   // if (props.armedKey === props.pressedKey) {
- //       props.setDefuseMode(true);
-   // }
-   // console.log(props);
-  //  const { keysPressed, armedKey, lastKeyPressed, onKeyDown } = props;
-   // const sweats = [
-   //     'https://media.giphy.com/media/LRVnPYqM8DLag/giphy.gif',
-   //     'https://media.giphy.com/media/4bWWKmUnn5E4/giphy.gif',
+    // if (props.armedKey === props.pressedKey) {
+    //       props.setDefuseMode(true);
+    // }
+    // console.log(props);
+    //  const { keysPressed, armedKey, lastKeyPressed, onKeyDown } = props;
+    // const sweats = [
+    //     'https://media.giphy.com/media/LRVnPYqM8DLag/giphy.gif',
+    //     'https://media.giphy.com/media/4bWWKmUnn5E4/giphy.gif',
     //    'https://media.giphy.com/media/hBn5xBlaUxyLu/giphy.gif'
-   // ];
+    // ];
 
     // const incNum = keysPressed.length;
     // const alarmTrigger = incNum < 16 ? 0 : 10 / incNum;
@@ -39,31 +39,30 @@ const Keyboard = props => {
     // const img2 = incNum < 22 ? 'hidden' : 'visible';
     // const img3 = incNum < 25 ? 'hidden' : 'visible';
 
-    //return (
-      //  <div className="wrapper" tabIndex="0">
+    return (
+        //  <div className="wrapper" tabIndex="0">
         //    {/* {incNum > 30 ? <Error /> : null} */}
-          //  <div className="keyboard">
-            //    {keys.map((row, i) => (
-              //      <KeyboardRow activeKeys={keysPressed} key={i} keyObj={keys[i]} />
-               // ))}
-    props.armedKey === props.lastKeyPressed ? (
-        <Boom />
-    ) : (
-        <div className="wrapper" onKeyDown={props.onKeyDown} onKeyUp={props.onKeyUp} tabIndex="0">
+        //  <div className="keyboard">
+        //    {keys.map((row, i) => (
+        //      <KeyboardRow activeKeys={keysPressed} key={i} keyObj={keys[i]} />
+        // ))}
+        <div className="wrapper">
             <div className="players-wrapper">
-                {props.players.map((player, i) => <PlayerAvatar key={player.player}
-                                                                currentPlayer={props.currentPlayer}
-                                                                nr={player.nr}
-                                                                name={player.player}
-                                                                color={player.color}
-                                                                invalid={props.invalidKey} />)
-                }
+                {props.players.map((player, i) => (
+                    <PlayerAvatar
+                        key={player.player}
+                        currentPlayer={props.currentPlayer}
+                        nr={player.nr}
+                        name={player.player}
+                        color={player.color}
+                        invalid={props.invalidKey}
+                    />
+                ))}
             </div>
             <div className="keyboard">
-                {keys.map((row, i) => <KeyboardRow key={i}
-                                                   keyObj={keys[i]}
-                                                   keysPressed={props.keysPressed} />)
-                }
+                {keys.map((row, i) => (
+                    <KeyboardRow key={i} keyObj={keys[i]} keysPressed={props.keysPressed} />
+                ))}
             </div>
             {/* {sweats.map((img, i) => <img key={i} className={`sweat sweat${i}`} src={img} />)} */}
             <style jsx>{`
@@ -136,9 +135,7 @@ const enhance = compose(
             props.setDefuseMode(arg);
         },
         onKeyDown: props => event => {
-
             props.setInvalidKey(false);
-
         },
         onKeyUp: props => event => {
             const validKey = codes.includes(event.keyCode);
@@ -146,11 +143,11 @@ const enhance = compose(
 
             //Check if key is not valid or already pressed.
             //If conditions are met set duplicate to true.
-            if (!validKey || alreadyPressed){
+            if (!validKey || alreadyPressed) {
                 props.setInvalidKey(true);
             } else {
-            //Else set duplicate to false,
-            //push valid keys to keys array and increment/reset player-turn depending on conditions.
+                //Else set duplicate to false,
+                //push valid keys to keys array and increment/reset player-turn depending on conditions.
                 props.setInvalidKey(false);
                 if (props.currentPlayer > props.players.length - 2) {
                     props.setCurrentPlayer(0);
@@ -178,4 +175,4 @@ const enhance = compose(
     boomOnBoom(props => props.defuseModeEngaged)
 );
 
-export default enhance(Keyboard);
+export default Keyboard;
