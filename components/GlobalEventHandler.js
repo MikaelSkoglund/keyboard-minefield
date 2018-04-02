@@ -4,13 +4,13 @@ class GlobalEventHandler extends React.Component {
         keysPressed: []
     };
 
-    onKeyDownMaster = e => {
-        const pressedKey = e.keyCode;
-        this.setState({
-            pressedKey,
-            keysPressed: [...this.state.keysPressed, pressedKey]
-        });
-    };
+    // onKeyDownMaster = e => {
+    //     const pressedKey = e.keyCode;
+    //     this.setState({
+    //         pressedKey,
+    //         keysPressed: [...this.state.keysPressed, pressedKey]
+    //     });
+    // };
 
     componentDidMount() {
         this.refs['global'].focus();

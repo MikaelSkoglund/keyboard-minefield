@@ -1,47 +1,18 @@
-import Keyboard from './Keyboard';
+import Keyboard  from './Keyboard.js';
 import SelectPlayers from './SelectPlayers';
 import { PlayersObj } from './PlayersObj';
+import { PlayerProvider, PlayerConsumer } from './PlayerContext.js';
 
 import { compose, withState, withHandlers, branch, renderComponent } from 'recompose';
 
-let num = 0;
-const App = (props) => (
-  <div>
-    <SelectPlayers
-      players={props.players}
-      incrementPlayers={props.incrementPlayers}
-      decrementPlayers={props.decrementPlayers}
-      toggleReady={props.toggleReady}
-      readyGame={props.readyGame}
-      />
-    {/* <Keyboard players={props.players}/> */}
-  </div>
-);
-
-const ReadyWhenReady = (ready) => branch(ready, renderComponent(Keyboard));
-
-const enhance = compose(
-  withState('players', 'setPlayers', [PlayersObj[num]]),
-  withState('readyGame', 'setReady', false),
-  withHandlers({
-    incrementPlayers: props => () => {
-        if(props.players.length < 6) {
-          num++
-          props.setPlayers([...props.players, PlayersObj[num]]);
-        }
-    },
-    decrementPlayers: props => () => {
-        if (props.players.length > 1) {
-          props.players.splice(num, 1);
-          num--
-          props.setPlayers(props.players);
-        }
-    },
-    toggleReady: props => () => {
-      props.setReady(true);
+class App extends React.Component {
+    render() {
+        return (
+            <PlayerProvider>
+                <PlayerConsumer>{({ state: { readyGame} }) => (readyGame ? <Keyboard /> : <SelectPlayers />)}</PlayerConsumer>
+            </PlayerProvider>
+        );
     }
-  }),
-  ReadyWhenReady(props => props.readyGame)
-);
+}
 
-export default enhance(App);
+export default App;
