@@ -13,7 +13,6 @@ export class PlayerProvider extends Component {
         lastKeyPressed: 0,
         keysPressed: [],
         defModeEng: false,
-        invalidKeyPress: false,
         currentPlayer: 0
     };
 
@@ -44,24 +43,32 @@ export class PlayerProvider extends Component {
         }
     };
 
-    invalidKey = keycode => (
-        codes.indexOf(keycode) === -1
-        && this.state.keysPressed.indexOf(keycode) !== -1
-        && !this.state.readyGame
+    validKey = keycode => (
+        codes.indexOf(keycode) !== -1
+        && this.state.keysPressed.indexOf(keycode) === -1
+        && this.state.readyGame
     );
 
     onKeyDownMaster = e => {
         const pressedKey = e.keyCode;
-        console.log(this.invalidKey(pressedKey));
-        if (this.invalidKey(pressedKey)) {
-            return;
+
+        // Check if key haven't been pressed && it's a valid key && game is ready.
+        if (this.validKey(pressedKey)) {
+            
+            if (pressedKey === this.state.armedKey) {
+                this.setState({
+                    defModeEng: true
+                });
+            }
+
+            const currentPlayer = this.state.currentPlayer !== (this.state.players.length - 1) ? this.state.currentPlayer + 1 : 0;
+            this.setState({
+                pressedKey,
+                keysPressed: [...this.state.keysPressed, pressedKey],
+                currentPlayer
+            });
+
         }
-        const currentPlayer = this.state.currentPlayer !== (this.state.players.length - 1) ? this.state.currentPlayer + 1 : 0;
-        this.setState({
-            pressedKey,
-            keysPressed: [...this.state.keysPressed, pressedKey],
-            currentPlayer
-        });
     }
 
     setArmed = () => {
