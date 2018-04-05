@@ -17,10 +17,12 @@ export class PlayerProvider extends Component {
     };
 
     actions = {
-        toggleReady: () =>
+        toggleReady: () => {
             this.setState({
                 readyGame: true
-            }),
+            })
+            this.refs['global'].focus();
+        },
         incrementPlayers: () => {
             if (num >= 5) {
                 return;
@@ -54,7 +56,7 @@ export class PlayerProvider extends Component {
 
         // Check if key haven't been pressed && it's a valid key && game is ready.
         if (this.validKey(pressedKey)) {
-            
+            console.log(this.state);
             if (pressedKey === this.state.armedKey) {
                 this.setState({
                     defModeEng: true
@@ -80,7 +82,6 @@ export class PlayerProvider extends Component {
 
     componentDidMount() {
         this.setArmed();
-        this.refs.global.focus();
     }
 
     render() {  

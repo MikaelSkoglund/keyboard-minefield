@@ -8,22 +8,11 @@ import { PlayerAvatar } from './Player';
 import { keys, codes } from './keyCodes';
 import { PlayersObj } from './PlayersObj';
 import { PlayerConsumer } from './PlayerContext';
-import {
-    compose,
-    withState,
-    withHandlers,
-    lifecycle,
-    branch,
-    renderComponent,
-    renderNothing,
-    withProps
-} from 'recompose';
 
 const Keyboard = () => {
     return (
         <PlayerConsumer>
             {context => {
-                console.log(context);
                 const {players, currentPlayer, keysPressed, defModeEng} = context.state;
                 if (defModeEng) {
                     return <Defuse/>

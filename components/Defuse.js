@@ -1,6 +1,4 @@
 import axios from 'axios';
-import { renderComponent, branch } from 'recompose';
-
 import Keyboard from './Keyboard';
 
 class Defuse extends React.Component {
