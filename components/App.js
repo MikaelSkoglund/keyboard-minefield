@@ -9,7 +9,7 @@ class App extends React.Component {
     render() {
         return (
             <PlayerProvider>
-                <PlayerConsumer>{({ state: { readyGame} }) => (readyGame ? <Keyboard /> : <SelectPlayers />)}</PlayerConsumer>
+                <PlayerConsumer>{({ state: { readyGame } }) => (readyGame ? <Keyboard /> : <SelectPlayers />)}</PlayerConsumer>
             </PlayerProvider>
         );
     }

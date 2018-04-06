@@ -10,11 +10,12 @@ export class PlayerProvider extends Component {
         players: [PlayersObj[0]],
         readyGame: false,
         armedKey: null,
-        lastKeyPressed: 0,
         keysPressed: [],
         defModeEng: false,
         currentPlayer: 0
     };
+
+    initState = this.state;
 
     actions = {
         toggleReady: () => {
@@ -22,6 +23,17 @@ export class PlayerProvider extends Component {
                 readyGame: true
             })
             this.refs['global'].focus();
+            this.setArmed();
+        },
+        toggleDefModeEng: () => {
+            this.setState({
+                defModeEng: !this.state.defModeEng,
+                keysPressed: []
+            })
+            //Re-set armed key when back after defuse
+            if (!this.state.defModeEng) {
+                this.setArmed();
+            }
         },
         incrementPlayers: () => {
             if (num >= 5) {
@@ -55,12 +67,10 @@ export class PlayerProvider extends Component {
         const pressedKey = e.keyCode;
 
         // Check if key haven't been pressed && it's a valid key && game is ready.
-        if (this.validKey(pressedKey)) {
-            console.log(this.state);
+        if (this.validKey(pressedKey) && !this.state.defModeEng) {
+
             if (pressedKey === this.state.armedKey) {
-                this.setState({
-                    defModeEng: true
-                });
+                this.actions.toggleDefModeEng();
             }
 
             const currentPlayer = this.state.currentPlayer !== (this.state.players.length - 1) ? this.state.currentPlayer + 1 : 0;
@@ -80,11 +90,13 @@ export class PlayerProvider extends Component {
         })
     }
 
-    componentDidMount() {
-        this.setArmed();
+    componentDidUpdate() {
+        if (!this.state.defModeEng) {
+            this.refs['global'].focus();
+        }
     }
 
-    render() {  
+    render() {
         return (
             <PlayerContext.Provider value={{ state: this.state, actions: this.actions }}>
                 <div onKeyDown={this.onKeyDownMaster} ref="global" tabIndex="0">

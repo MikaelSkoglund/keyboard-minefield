@@ -22,6 +22,7 @@ class Defuse extends React.Component {
                 safeWord: arr,
                 scrambled: scrambleDel
             });
+            this.checkReady();
         }
     };
 
@@ -65,12 +66,16 @@ class Defuse extends React.Component {
         this.fetchData();
         this.refs['wrapper'].focus();
     }
+    
+    checkReady() {
+        if (this.state.safeWord.length === 0 && this.state.decrypted.length > 0) {
+            this.props.actions.toggleDefModeEng();
+        }
+    }
 
     render() {
-        const { safeWord, decrypted, scrambled } = this.state;
-        if (safeWord.length === 0 && decrypted.length > 0) {
-            return <Keyboard />;
-        }
+        const { decrypted, scrambled } = this.state;
+
         return (
             <div ref="wrapper" className="wrapper" tabIndex="0" onKeyDown={this.pressKeys}>
                 <div className="head">

@@ -1,9 +1,7 @@
 import KeyboardRow from './KeyboardRow';
-import Boom from './Boom';
 import Error from './Error';
 import Defuse from './Defuse';
 import Defuser from './DefuseWIP';
-import GlobalEventHandler from './GlobalEventHandler';
 import { PlayerAvatar } from './Player';
 import { keys, codes } from './keyCodes';
 import { PlayersObj } from './PlayersObj';
@@ -15,7 +13,7 @@ const Keyboard = () => {
             {context => {
                 const {players, currentPlayer, keysPressed, defModeEng} = context.state;
                 if (defModeEng) {
-                    return <Defuse/>
+                    return <Defuse {...context} />
                 }
                 return (
                     <div className="wrapper">
